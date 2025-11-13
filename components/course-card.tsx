@@ -140,13 +140,13 @@ export const CourseCard = ({
                 <MoreVertical className="text-white opacity-75 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer border-none" />
               </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="absolute right-0 w-36 py-1 bg-white rounded-sm">
+            <DropdownMenuContent className="absolute right-0 w-36 py-1 bg-background rounded-sm">
               <DropdownMenuGroup>
                 <DropdownMenuItem
                   onClick={toggleWatchLater}
                   className={cn(
                     isInWatchLater &&
-                      "text-custom-primary hover:text-input-border hover:bg-custom-primary/10"
+                      "text-custom-primary hover:text-input-border hover:bg-custom-primary/10 hover:bg-gray-800"
                   )}
                 >
                   <MdOutlineWatchLater className="mr-2" />
@@ -155,7 +155,7 @@ export const CourseCard = ({
                 <DropdownMenuItem asChild className="text-xs">
                   <Dialog>
                     <DialogTrigger asChild>
-                      <button className="flex text-sm items-center w-full px-2 py-1 hover:bg-gray-100">
+                      <button className="flex text-sm items-center w-full px-2 py-1 hover:bg-gray-800">
                         <IoIosShareAlt className="mr-2" />
                         Share
                       </button>

@@ -4,7 +4,7 @@ import { UserButton } from "./user-button"
 
 export const Sidebar = () => {
   return (
-    <div className="h-full border-r flex flex-col overflow-y-auto shadow-sm">
+    <div className="h-full border-r flex flex-col overflow-y-auto shadow-sm bg-background">
       <div className="p-6 pt-8 ">
       <Logo />
       </div>

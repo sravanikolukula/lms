@@ -85,7 +85,7 @@ const QuizCard = ({ questions, onQuizComplete, quizId, quizTimeline }: QuizCardP
 
     return (
       <div key={question.id} className="mt-4">
-        <p className="font-medium text-lg text-black">{question.text}</p>
+        <p className="font-medium text-lg text-white">{question.text}</p>
         {question.type === "MCQ" && (
           <div className="mt-2">
             {["option1", "option2", "option3", "option4"].map((optionKey) => {
@@ -94,7 +94,7 @@ const QuizCard = ({ questions, onQuizComplete, quizId, quizTimeline }: QuizCardP
                 option && (
                   <div
                     key={optionKey}
-                    className={`flex text-black items-center cursor-pointer mt-1 p-2 rounded-md ${
+                    className={`flex text-white items-center cursor-pointer mt-1 p-2 rounded-md ${
                       selectedAnswer === option ? "bg-slate-800" : "bg-slate-900"
                     }`}
                     onClick={() => isSubmitted ? '' : handleAnswerSelection(option.toString())}
@@ -123,7 +123,7 @@ const QuizCard = ({ questions, onQuizComplete, quizId, quizTimeline }: QuizCardP
           <div className="flex items-center mt-2">
             <input
               type="text"
-              className={`border border-gray-300 rounded-md p-2 w-full text-black ${isSubmitted && checkAnswer(question, selectedAnswer || '') ? 'border-green-500' : 'border-red-500'}`}
+              className={`border border-gray-300 rounded-md p-2 w-full text-white ${isSubmitted && checkAnswer(question, selectedAnswer || '') ? 'border-green-500' : 'border-red-500'}`}
               placeholder="Enter your answer"
               value={selectedAnswer || ''}
               onChange={(e) => setSelectedAnswer(e.target.value)}
@@ -171,8 +171,8 @@ const QuizCard = ({ questions, onQuizComplete, quizId, quizTimeline }: QuizCardP
       )}
       {quizDone && (
         <div className="flex flex-col items-center">
-          <h2 className="text-3xl text-black font-bold mb-4">Quiz Result</h2>
-          <p className="text-2xl text-black mt-4">{percentageScore.toFixed(2)}% Correct!</p>
+          <h2 className="text-3xl text-white font-bold mb-4">Quiz Result</h2>
+          <p className="text-2xl text-white mt-4">{percentageScore.toFixed(2)}% Correct!</p>
           <Link href="#" onClick={() => onQuizComplete(quizTimeline)} className="mt-8">
             <Button variant="default">Back to Video</Button>
           </Link>
