@@ -298,4 +298,14 @@ body,
   font-size: 16px !important;
 }
 
+.ql-container {
+  background-color: #0f172a !important;
+  /* dark background */
+}
+
+.ql-editor {
+  color: #fff !important;
+  /* white text */
+}
+
 @import "~@uploadthing/react/styles.css";

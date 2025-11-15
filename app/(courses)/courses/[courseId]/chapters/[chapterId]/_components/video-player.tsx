@@ -79,6 +79,7 @@ export const VideoPlayer = ({
         toast.success("Progress updated");
         router.refresh();
 
+       
         console.log("quizzes",quizzes);
 
         if (nextChapterId) {
@@ -139,6 +140,7 @@ export const VideoPlayer = ({
       const newVideoUrl = `${videoUrl}#t=${resumeTime}`;
       setUpdatedVideoUrl(newVideoUrl);
     }
+
   }, [resumeTime, videoUrl]);
 
   return (

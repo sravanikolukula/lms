@@ -18,7 +18,7 @@ function NavBar({userId}: NavBarProps) {
     <section className="landing-section">
     <div className=" md:top-0   md:shadow-none  mx-auto max-w-[1200px]  ">
       {/* DESKTOP */}
-      <div className=" animate-in fade-in zoom-in bg-white py-4">
+      <div className=" animate-in fade-in zoom-in bg-background py-4">
         <div className="flex justify-between items-center">
         
           <Logo />

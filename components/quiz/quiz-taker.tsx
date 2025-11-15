@@ -87,8 +87,9 @@ export function QuizTaker({ courseId, chapterId, quizId }: QuizTakerProps) {
           </CardHeader>
           <CardContent>
             <p className="text-red-800">
-              This quiz doesn't have any questions yet. Please check back later.
+              {"This quiz doesn't have any questions yet. Please check back later."}
             </p>
+
           </CardContent>
         </Card>
       </div>
