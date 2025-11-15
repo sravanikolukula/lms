@@ -69,6 +69,21 @@ export const ChapterQuizForm = ({
       toast.success("Quiz created");
       toggleCreating();
 
+      // If chapter has a video/description, trigger auto-generation for the newly created quiz
+      try {
+        const chapterContent = initialData.description || "";
+        if (chapterContent && chapterContent.trim().length > 0) {
+          await axios.post(
+            `/api/courses/${courseId}/chapters/${chapterId}/quizzes/${newQuiz.id}/generate`,
+            { videoContent: chapterContent, numberOfQuestions: 5, difficulty: 'medium' }
+          );
+          toast.success("Auto-generation started for the new quiz");
+        }
+      } catch (genErr) {
+        console.error("Auto-generation after quiz create failed:", genErr);
+        toast.error("Auto-generation failed for the new quiz");
+      }
+
       router.refresh(); // Refresh the page or relevant data after creation
     } catch (error) {
       console.error("Quiz creation error:", error);

@@ -4,6 +4,44 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { currentUser } from "@/lib/auth";
 
+export async function GET(
+  req: Request,
+  { params }: { params: { courseId: string; chapterId: string; quizId: string } }
+) {
+  try {
+    const quiz = await db.quiz.findUnique({
+      where: {
+        id: params.quizId,
+        chapterId: params.chapterId,
+      },
+      include: {
+        questions: {
+          select: {
+            id: true,
+            text: true,
+            type: true,
+            option1: true,
+            option2: true,
+            option3: true,
+            option4: true,
+            // Don't send the answer to the client for students
+            answer: false,
+          },
+        },
+      },
+    });
+
+    if (!quiz) {
+      return new NextResponse("Quiz not found", { status: 404 });
+    }
+
+    return NextResponse.json(quiz);
+  } catch (error) {
+    console.log("[QUIZ_GET]", error);
+    return new NextResponse("Internal Error", { status: 500 });
+  }
+}
+
 export async function DELETE(
   req: Request,
   { params }: { params: { courseId: string; chapterId: string; quizId: string } }
