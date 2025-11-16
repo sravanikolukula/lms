@@ -35,6 +35,12 @@ const formSchema = z.object({
   }),
 });
 
+// Convert "hh:mm:ss" to seconds
+const convertToSeconds = (time: string) => {
+  const [h, m, s] = time.split(":").map(Number);
+  return h * 3600 + m * 60 + s;
+};
+
 export const ChapterQuizForm = ({
   initialData,
   courseId,
@@ -60,9 +66,11 @@ export const ChapterQuizForm = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
+      const timelineInSeconds = convertToSeconds(values.timeline);
+
       const response = await axios.post(`/api/courses/${courseId}/chapters/${chapterId}/quizzes`, {
         title: values.title,
-        timeline: values.timeline,
+        timeline: timelineInSeconds,
       });
 
       const newQuiz = response.data;
@@ -71,8 +79,8 @@ export const ChapterQuizForm = ({
 
       // If chapter has a video/description, trigger auto-generation for the newly created quiz
       try {
-        const chapterContent = initialData.description || "";
-        if (chapterContent && chapterContent.trim().length > 0) {
+        const chapterContent = initialData.description?.trim() ?? "";
+        if (chapterContent.length > 0) {
           await axios.post(
             `/api/courses/${courseId}/chapters/${chapterId}/quizzes/${newQuiz.id}/generate`,
             { videoContent: chapterContent, numberOfQuestions: 5, difficulty: 'medium' }

@@ -1,6 +1,5 @@
 // ChapterIdPage.tsx
-"use client";
-import { useEffect } from "react";
+
 import { redirect } from "next/navigation";
 import { File } from "lucide-react";
 import { Banner } from "@/components/banner";
@@ -66,10 +65,7 @@ const ChapterIdPage = async ({
   // Determine the timeline for the first incomplete quiz
   const quizTimelineSeconds = incompleteQuizzes.length > 0 ? incompleteQuizzes[0].timeline : 0;
 
-  useEffect(()=>{
-    console.log("chapter",chapter);
-
-  },[])
+ 
   return (
     <div>
       <div>

@@ -59,6 +59,8 @@ export const GenerateQuizQuestionsButton = ({
     }
   };
 
+  
+
   if (!isOpen) {
     return (
       <Button

@@ -58,9 +58,12 @@ export function QuizEditor({
   const fetchQuestions = async () => {
     try {
       setIsLoading(true);
+
+      // IMPORTANT: editor=true ensures backend returns answers
       const response = await axios.get(
-        `/api/courses/${courseId}/chapters/${chapterId}/quizzes/${quizId}`
+        `/api/courses/${courseId}/chapters/${chapterId}/quizzes/${quizId}?editor=true`
       );
+
       setQuestions(response.data.questions || []);
     } catch (error) {
       console.error("Failed to fetch questions:", error);
@@ -84,9 +87,9 @@ export function QuizEditor({
   };
 
   const handleUpdateQuestion = (index: number, field: keyof Question, value: string) => {
-    const updatedQuestions = [...questions];
-    updatedQuestions[index] = { ...updatedQuestions[index], [field]: value };
-    setQuestions(updatedQuestions);
+    const updated = [...questions];
+    updated[index] = { ...updated[index], [field]: value };
+    setQuestions(updated);
   };
 
   const handleDeleteQuestion = (index: number) => {
@@ -155,6 +158,7 @@ export function QuizEditor({
 
   return (
     <div className="container mx-auto py-8 px-4">
+
       {/* Header */}
       <div className="mb-8">
         <Link
@@ -171,50 +175,43 @@ export function QuizEditor({
       {/* AI Generation Section */}
       <Card className="mb-8 bg-slate-800 border-slate-700">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <span>🤖 AI Generate Questions</span>
-          </CardTitle>
+          <CardTitle className="flex items-center gap-2">🤖 AI Generate Questions</CardTitle>
           <CardDescription>
             Let AI automatically generate quiz questions based on your content
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
+
           <div>
-            <label className="block text-sm font-medium mb-2">
-              Chapter Content / Video Transcript
-            </label>
+            <label className="block text-sm font-medium mb-2">Chapter Content</label>
             <textarea
               value={chapterContent}
               onChange={(e) => setChapterContent(e.target.value)}
-              placeholder="Paste your chapter content or video transcript here..."
+              placeholder="Paste chapter content here..."
               className="w-full h-32 p-3 bg-slate-900 border border-slate-600 rounded text-white"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-2">
-                Number of Questions
-              </label>
+              <label className="block text-sm font-medium mb-2">Number of Questions</label>
               <Select value={numberOfQuestions} onValueChange={setNumberOfQuestions}>
                 <SelectTrigger className="bg-slate-900 border-slate-600">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="3">3 Questions</SelectItem>
-                  <SelectItem value="5">5 Questions</SelectItem>
-                  <SelectItem value="10">10 Questions</SelectItem>
-                  <SelectItem value="15">15 Questions</SelectItem>
-                  <SelectItem value="20">20 Questions</SelectItem>
+                  <SelectItem value="3">3</SelectItem>
+                  <SelectItem value="5">5</SelectItem>
+                  <SelectItem value="10">10</SelectItem>
+                  <SelectItem value="15">15</SelectItem>
+                  <SelectItem value="20">20</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2">
-                Difficulty Level
-              </label>
-              <Select value={difficulty} onValueChange={(value: any) => setDifficulty(value)}>
+              <label className="block text-sm font-medium mb-2">Difficulty</label>
+              <Select value={difficulty} onValueChange={(val: any) => setDifficulty(val)}>
                 <SelectTrigger className="bg-slate-900 border-slate-600">
                   <SelectValue />
                 </SelectTrigger>
@@ -238,33 +235,33 @@ export function QuizEditor({
         </CardContent>
       </Card>
 
-      {/* Questions Editor Section */}
+      {/* Questions Editor */}
       <Card className="bg-slate-800 border-slate-700">
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
             <CardTitle>Quiz Questions ({questions.length})</CardTitle>
-            <CardDescription>
-              Add, edit, or remove questions from your quiz
-            </CardDescription>
+            <CardDescription>Edit or add quiz questions</CardDescription>
           </div>
+
           <Button
             onClick={handleAddQuestion}
             variant="outline"
             className="gap-2 border-slate-600 hover:bg-slate-700"
           >
-            <Plus className="h-4 w-4" />
-            Add Question
+            <Plus className="h-4 w-4" /> Add Question
           </Button>
         </CardHeader>
+
         <CardContent className="space-y-6">
           {questions.length === 0 ? (
-            <div className="text-center py-12 text-gray-400">
-              <p>No questions yet. Generate questions or add them manually.</p>
-            </div>
+            <p className="text-center text-slate-400 py-12">
+              No questions yet. Generate or add manually.
+            </p>
           ) : (
-            questions.map((question, index) => (
-              <div key={index} className="space-y-4 p-4 bg-slate-900 rounded-lg border border-slate-700">
-                <div className="flex justify-between items-start">
+            questions.map((q, index) => (
+              <div key={index} className="p-4 bg-slate-900 rounded-lg border border-slate-700 space-y-4">
+
+                <div className="flex justify-between">
                   <h3 className="font-semibold text-lg">Question {index + 1}</h3>
                   <Button
                     onClick={() => handleDeleteQuestion(index)}
@@ -277,46 +274,39 @@ export function QuizEditor({
                 </div>
 
                 {/* Question Text */}
-                <div>
-                  <label className="block text-sm font-medium mb-2">Question</label>
-                  <textarea
-                    value={question.text}
-                    onChange={(e) => handleUpdateQuestion(index, "text", e.target.value)}
-                    placeholder="Enter question text..."
-                    className="w-full h-20 p-2 bg-slate-800 border border-slate-600 rounded text-white"
-                  />
-                </div>
+                <textarea
+                  value={q.text}
+                  onChange={(e) => handleUpdateQuestion(index, "text", e.target.value)}
+                  className="w-full h-20 p-2 bg-slate-800 border border-slate-600 rounded text-white"
+                  placeholder="Enter question text..."
+                />
 
                 {/* Options */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {(["option1", "option2", "option3", "option4"] as const).map((opt) => (
-                    <div key={opt}>
-                      <label className="block text-sm font-medium mb-1 capitalize">
-                        {opt.replace("option", "Option ")}
-                      </label>
-                      <Input
-                        value={question[opt]}
-                        onChange={(e) => handleUpdateQuestion(index, opt, e.target.value)}
-                        placeholder={`Enter option ${opt.slice(-1)}`}
-                        className="bg-slate-800 border-slate-600"
-                      />
-                    </div>
+                    <Input
+                      key={opt}
+                      value={q[opt]}
+                      onChange={(e) => handleUpdateQuestion(index, opt, e.target.value)}
+                      placeholder={`Enter option ${opt.slice(-1)}`}
+                      className="bg-slate-800 border-slate-600"
+                    />
                   ))}
                 </div>
 
                 {/* Correct Answer */}
                 <div>
-                  <label className="block text-sm font-medium mb-2">Correct Answer</label>
+                  <label className="text-sm font-medium mb-2 block">Correct Answer</label>
                   <Select
-                    value={question.answer}
-                    onValueChange={(value) => handleUpdateQuestion(index, "answer", value)}
+                    value={q.answer}
+                    onValueChange={(val) => handleUpdateQuestion(index, "answer", val)}
                   >
                     <SelectTrigger className="bg-slate-800 border-slate-600">
                       <SelectValue placeholder="Select correct answer" />
                     </SelectTrigger>
                     <SelectContent>
-                      {[question.option1, question.option2, question.option3, question.option4]
-                        .filter((opt) => opt)
+                      {[q.option1, q.option2, q.option3, q.option4]
+                        .filter(Boolean)
                         .map((opt) => (
                           <SelectItem key={opt} value={opt}>
                             {opt}
@@ -331,7 +321,7 @@ export function QuizEditor({
         </CardContent>
       </Card>
 
-      {/* Action Buttons */}
+      {/* Save */}
       <div className="mt-8 flex gap-4">
         <Button
           onClick={() => router.back()}
@@ -340,6 +330,7 @@ export function QuizEditor({
         >
           Cancel
         </Button>
+
         <Button
           onClick={handleSaveQuestions}
           disabled={isSaving || questions.length === 0}

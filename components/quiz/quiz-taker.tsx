@@ -48,25 +48,29 @@ export function QuizTaker({ courseId, chapterId, quizId }: QuizTakerProps) {
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [score, setScore] = useState(0);
 
+
+ const fetchQuiz = async () => {
+  try {
+    setIsLoading(true);
+    const response = await axios.get(
+      `/api/courses/${courseId}/chapters/${chapterId}/quizzes/${quizId}?student=true`
+    );
+
+    setQuiz(response.data);
+  } catch (error) {
+    console.error("Failed to fetch quiz:", error);
+    toast.error("Failed to load quiz");
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+
+
   useEffect(() => {
     fetchQuiz();
   }, [quizId]);
-
-  const fetchQuiz = async () => {
-    try {
-      setIsLoading(true);
-      const response = await axios.get(
-        `/api/courses/${courseId}/chapters/${chapterId}/quizzes/${quizId}`
-      );
-      setQuiz(response.data);
-    } catch (error) {
-      console.error("Failed to fetch quiz:", error);
-      toast.error("Failed to load quiz");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
+  
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen">

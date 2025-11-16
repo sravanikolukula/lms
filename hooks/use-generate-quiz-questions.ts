@@ -48,7 +48,8 @@ export const useGenerateQuizQuestions = () => {
       const response = await axios.post(
         `/api/courses/${courseId}/chapters/${chapterId}/quizzes/${quizId}/generate`,
         {
-          chapterContent: params_data.chapterContent,
+          // IMPORTANT FIX
+          videoContent: params_data.chapterContent,
           numberOfQuestions: params_data.numberOfQuestions || 10,
           difficulty: params_data.difficulty || "medium",
         }

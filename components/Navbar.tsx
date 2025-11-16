@@ -36,6 +36,7 @@ function NavBar({userId}: NavBarProps) {
             </Link>}
             
            
+           
            <Link href={"/auth/register"}>
            <Button
             variant="outline"
